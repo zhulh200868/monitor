@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Nagios Report</title>
+
+		<script type="text/javascript" src="/static/js/jquery-2.1.1.js"></script>
+		<style type="text/css">
+${demo.css}
+		</style>
+		<script type="text/javascript">
+        
+$(function () {
+     Highcharts.setOptions({
+        global: {
+            useUTC: false,
+        }
+    });
+    //{% block page-content %}
+    //hostname = {{hostname}}
+    //service_name = {{service_name}}
+    //{% endblock %}
+    $.getJSON('/api/graph_data/',{'hostname':'{{hostname}}','service_name':'{{service_name}}'}, function (data) {
+    
+
+
+        $('#container').highcharts('StockChart', {
+
+            //chart: {
+            //    type: 'arearange'
+            //},
+
+            rangeSelector: {
+                inputEnabled: $('#container').width() > 480,
+                selected: 2
+            },
+
+            title: {
+                //text: 'CPU usage'
+                text: '{{service_name}}'
+            },
+
+            tooltip: {
+                valueSuffix: '%'
+            },
+
+            series: [{
+                name: 'usage',
+                data: data
+            }]
+
+        });
+    });
+
+});
+
+		</script>
+	</head>
+	<body>
+<script src="/static/highstock/js/highstock.js"></script>
+<script src="/static/highstock/js/highcharts-more.js"></script>
+<script src="/static/highstock/js/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</body>
+</html>

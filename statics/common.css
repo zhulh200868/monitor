@@ -1,0 +1,88 @@
+body{
+	margin: 0 auto;
+}
+.container{
+	width:990px;
+	margin: 0 auto;
+}
+
+.lef{
+	float: left;
+}
+
+.right{
+	float: right;
+}
+
+.pg-header{
+	background-color: #999;
+	height: 45px;
+	position: fixed;
+	width: 100%;
+}
+.pg-header .logo{
+	font-size: 25px;  
+	font-weight: bold; 
+	color:white; 
+	line-height: 45px; 
+	margin-left: 20px;
+}
+
+.pg-body{
+	
+	min-height: 600px;
+	padding-top: 60px;
+}
+
+.pg-body .menu{
+	width: 280px;
+	background-color: white;
+	position: fixed;
+	top: 60px;
+	left: 10px;
+	bottom: 5px;
+	background-color: #f1f1f1;
+	overflow: auto;
+}
+.pg-body .menu dl{
+	margin: 0px;
+}
+.pg-body .menu dt{
+	font-size: 16px;
+	font-weight: bold;
+	padding: 5px 0px;
+	background-color: #08c;
+	padding-left: 10px;
+	color: white;
+}
+.pg-body .menu dd{
+	padding: 3px 0px;
+	font-size:20px; 
+}
+
+.pg-body .title{
+	background-color: 
+}
+
+.pg-body .content{
+	margin-left: 300px;
+	border: 1px dotted #ddd;
+}
+
+.pg-body .content .group{
+	border-bottom: 1px dotted #ddd;
+	margin: 10px;
+}
+
+a:link,a:visited{
+ text-decoration:none;  /*超链接无下划线*/
+}
+
+.select{
+width:200px;   
+
+}
+
+.hide{
+    display:none;
+}

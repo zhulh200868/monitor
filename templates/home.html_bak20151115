@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv='content-type' content='text/html;charset=utf-8'>
+		<meta http-equiv="refresh" content="20">
+		<title>Nagios Core</title>
+		<link rel="shortcut icon" href="/static/image/favicon.ico">
+		<link rel="stylesheet" type="text/css" href="/static/common.css">
+		<script type="text/javascript" src="/static/js/jquery-2.1.1.js"></script>
+		<script type="text/javascript">
+		<!-- 禁止提交请选择 -->
+		 	function check(){  
+            	var nameValue=window.document.getElementById("hostname").value;
+            	var serviceValue=window.document.getElementById("service_name").value; 
+            	console.log('hello')
+            	if (nameValue == "-1") // 或者是!nameValue  
+            	{  
+               	 window.alert("主机名不能为'请选择'！");                 	 
+                	return false;  
+            	}  if (serviceValue == "-1") // 或者是!serviceValue            	
+            	{  
+               	 window.alert("监控项不能为'请选择'");  
+                	return false;  
+            	}  
+            		return true;    
+       		}  
+       		$(function(){
+       			Init();
+       			$('#hostname').change(function(){
+					hostnameid = $(this).find('option:selected').val()
+					//alert(hostnameid)
+					//下面就是防止。。。
+					$('#service_name :gt(0)').remove();
+					Request('/getservice_name/',Bindservice_name,{Id:hostnameid})
+					})
+       		
+				$('#request').click(function(){
+					//AjaxRequest();
+					alert($(this).find('option:selected').val())
+					alert($('#hostname').find('option:selected').val());
+					alert($("#hostname option:selected").val());
+				});
+       		});
+       		 function Init(){
+       		 	Request('/gethostname/',Bindhostname,null)
+       			}
+			function Request(url,func,data){
+				$.ajax({
+					type:'GET',
+					data:data,
+					url:url,
+					cache:false,
+					async:true,
+					success:func
+				});
+			}
+			function Bindhostname(data){
+				//console.log(data)
+				//这里出现Uncaught TypeError: Cannot use 'in' operator to search for '30' in ["Test_server", "Zhulh_server"]
+				//解决办法：JSON字符串转换为JavaScript对象。
+				//$.each(data,function(i){
+				data = JSON.parse(data)
+				//data = $.parseJSON(data)
+				//在这里使用上面的方法没有效果
+				$.each(data,function(i){
+					console.log(data[i])
+					//op = "<option value="+i+">"+data[i]+"</option>"
+					op = "<option value="+i+">"+data[i]+"</option>"
+					//console.log(JSON.parse(data)[i])
+					$('#hostname').append(op);
+				})	
+			}
+			function Bindservice_name(data){
+				data = JSON.parse(data)
+				//console.log(data)
+				$.each(data,function(i){
+					op = "<option value="+data[i]+">"+data[i]+"</option>"
+					$('#service_name').append(op);
+				})	
+			}
+        </script>
+	</head>
+	<body>
+		<div class='pg-header'>
+			<div class='logo'>Nagios</div> 
+		</div>
+		<div class='pg-body'>
+			<div class='menu'>
+				<dl>
+					<dt>General</dt>
+						<dd><a href="/nagios/">Home</a></dd>					
+					<dt>Current Status</dt>
+						<dd><a href="#t2">Services</a></dd>
+					<dt>Problems</dt>
+						<dd><a href="/nagios/">Services Problems</a></dd>
+					<dt>Report</dt>
+						<dd><a href="#t4">Services Report</a></dd>
+				</dl>
+			</div>
+			<div class='content' >
+			    <h2>1、一个重要的功能，就是左侧菜单选中，其它菜单的内容需要hide。</h2>
+        		<h2>2、如何将m_handle和alter_data两个程序封装</h2>
+				<div class='group' id='t1' align="center">
+					<img src="/static/image/logofullsize.png" border="0"  alt="logo">
+					<p>Nagios是一款开源的免费网络监视工具，能有效监控Windows、Linux和Unix的主机状态，交换机路由器等网络设置，打印机等。在系统或服务状态异常时发出邮件或短信报警第一时间通知网站运维人员，在状态恢复后发出正常的邮件或短信通知。</p>
+				</div>
+				<!-- <div><img src="/statics/image/kenan.jpg" border="0"  ></div> -->
+				<!-- 下面block指在它的包围的内容可以被重写，extends可以不用该内容 -->
+				{% block page-content %}
+				<!-- Services Problems -->
+		<div id='t3' align="center">
+			<h2>Service Status Details For All Hosts</h2>			
+		 	<table border="0" width="100%">
+		 		<tr>
+		 			<th>Hostname&nbsp;<img src="/static/image/up.gif" border="0" alt="Sort by host name (descending)" title="Sort by host name (descending)"><img src="/static/image/down.gif" border="0" alt="Sort by host name (descending)" title="Sort by host name (descending)"></th>
+		 			<th>Service_name&nbsp;<img src=/static/image/up.gif border="0" alt="Sort by host name (descending)" title="Sort by host name (descending)"><img src=/static/image/down.gif border="0" alt="Sort by host name (descending)" title="Sort by host name (descending)"></th>
+		 			<th>Time&nbsp;<img src=/static/image/up.gif border="0" alt="Sort by host name (descending)" title="Sort by host name (descending)"><img src=/static/image/down.gif border="0" alt="Sort by host name (descending)" title="Sort by host name (descending)"></th>
+		 		</tr>
+		 		{% for meg in meg%}
+		 		<tr>		 			
+		 			<th bgColor=#FF3332>{{meg.hostname}}</th>
+		 			<th bgColor=#FF3333>{{meg.service_name}}</th>
+		 			<th bgColor=#FF3333>{{meg.time}}</th>      	
+		 		</tr>
+		 		{% endfor %}
+		 	</table>
+		</div>
+		{% endblock %}
+				<br>
+				<br>
+				<!-- 
+				<div id='t4' align="center">
+						<h2>Service Reports</h2>
+				        <form name="numput"  method="post" action="http://127.0.0.1:9000/graph/" onsubmit="return check()" target="_blank">  
+        		<h1 style="color:red">下面这个表单没有使用二级联动，但是能将value提交给graph，提供图标数据，没做成二级联动是因为value是要传给后台，因为下面已经实现功能，所以此处已经作废</h1>	
+        				  <div align="center">
+        					<label >主机名：</label> 
+        					<select class="select" name="hostname" id="uhostname" >
+        					<option selected>请选择</option>
+        					{% for h_list in h_list %}
+        					<option value='{{h_list}}' >{{h_list}}</option> 
+        					{% endfor %}
+							</select> 
+							<br>
+							<label >监控项：</label> 
+        					<select class="select" name="service_name" id="uservice_name" >
+        					<option selected>请选择</option>
+        					{% for v_values in v_value %}
+        					<option value='{{v_values.service_name}}'>{{v_values.service_name}}</option> 
+        					{% endfor %}
+							</select> 
+							<br>						
+							<input type="submit" value="提交"> 
+						  </div>
+	     				</form>
+				</div> -->
+				<div align="center" id='t4'> 
+				<h2 >Service Reports</h2>
+				<h1 style="color:red">下面这个表单使用二级联动，已经实现了提供图标数据，下面就需要完善一下</h1>
+					<form name="numput"  method="post" action="http://127.0.0.1:9000/graph/" onsubmit="return check()" target="_blank">  
+				       <div align="center">
+        					<label for='hostname'>主机名：</label> 
+        					<select id='hostname' name="hostname" class="select">
+        						<option value='-1'>请选择</option>
+        					</select>
+        					<br/>
+        					<label for='service_name'>监控项：</label> 
+        					<select id='service_name' name="service_name" class="select">
+        						<option value='-1'>请选择</option>
+        					</select>
+        					<br/>
+        					<input type="submit" value="提交"> 
+        				</div>
+        			</form>
+        	   </div>
+			</div>			
+		</div>
+	</body>
+</html>

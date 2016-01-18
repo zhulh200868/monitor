@@ -1,0 +1,13 @@
+eclipse.preferences.version=1
+encoding//core/alter_center.py=utf-8
+encoding//core/logger.py=utf-8
+encoding//core/m_handle.py=utf-8
+encoding//core/py_mysql.py=utf-8
+encoding//core/redis_connector.py=utf-8
+encoding//core/sendemail.py=utf-8
+encoding//m_client/core/interactive.py=UTF-8
+encoding//m_client/plugins/assets.py=utf-8
+encoding//m_client/plugins/salt.py=utf-8
+encoding//web/models.py=utf-8
+encoding//web/redis_connector.py=utf-8
+encoding//web/views.py=utf-8
